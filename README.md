@@ -2,6 +2,8 @@
 
 **Geostream** is a Python tool to interact with OGC APIs with ease and download geospatial data to Geopandas GeoDataFrames. 
 
+**Status**: Currently only works with WFS API and is very experimental by nature. Use at own risk. 
+
 ## Installation
 
 `geostream` is available via PyPi and can be installed with:
