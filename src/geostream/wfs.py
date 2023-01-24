@@ -5,14 +5,14 @@ import geopandas as gpd
 
 
 class WFS:
-    def __init__(self, wfs_url):
+    def __init__(self, wfs_url, version="1.0.0"):
         """Connection object for a specified WFS service"""
 
         # WFS end point
         self.wfs_url = wfs_url
 
         # Initialize
-        self.wfs = WebFeatureService(url=self.wfs_url)
+        self.wfs = WebFeatureService(url=self.wfs_url, version=version)
 
         # Meta data
         self.meta_data = self.init_layer_info()
@@ -42,7 +42,7 @@ class WFS:
         return self.layers
 
     def get_layer_info(self, layer_id=None):
-        """Get meta data information for all layers or for a specific WFS layer"""
+        """Get metadata information for all layers or for a specific WFS layer"""
         if layer_id is not None:
             return self.meta_data[layer_id]
         else:
@@ -127,7 +127,7 @@ class WFS:
 
         # Retrieve the data
         print(
-            "======================================\nDownloading data for: %s\n======================================\n" % layer_id)
+            f"======================================\nDownloading data for: {layer_id}\n======================================\n")
         data = gpd.read_file(q)
         return data
 
@@ -135,6 +135,7 @@ class WFS:
         """
         Retrieves data using fiona.
         """
+        import fiona
         response = self.wfs.getfeature(typename=[layer_id], bbox=bounding_box, srsname=epsg_spec)
         b = bytes(response.read())
         with fiona.BytesCollection(b) as f:
